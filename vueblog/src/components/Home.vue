@@ -1,7 +1,7 @@
 <template>
   <el-container class="home_container">
     <el-header>
-      <div class="home_title">V部落博客管理平台</div>
+      <div class="home_title">为憨憨打造平台</div>
       <div class="home_userinfoContainer">
         <el-dropdown @command="handleCommand">
   <span class="el-dropdown-link home_userinfo">
@@ -77,7 +77,7 @@
       }
     },
     mounted: function () {
-      this.$alert('为了确保所有的小伙伴都能看到完整的数据演示，数据库只开放了查询权限和部分字段的更新权限，其他权限都不具备，完整权限的演示需要大家在自己本地部署后，换一个正常的数据库用户后即可查看，这点请大家悉知!', '友情提示', {
+      this.$alert('这是准备给马大培写羞羞小说的地方，说不好以后就境外架设服务器，分分钟几百万分分钟进去的那种网站就做起来了！', '友情提示', {
         confirmButtonText: '确定',
         callback: action => {
         }

@@ -4,24 +4,33 @@ import org.sang.bean.RespBean;
 import org.sang.bean.User;
 import org.sang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by sang on 2017/12/17.
  */
-@RestController
+@Controller
 public class LoginRegController {
 
     @Autowired
     UserService userService;
 
+    @RequestMapping("/")
+    public String index(){
+        return "/index.html";
+    }
+
     @RequestMapping("/login_error")
+    @ResponseBody
     public RespBean loginError() {
         return new RespBean("error", "登录失败!");
     }
 
     @RequestMapping("/login_success")
+    @ResponseBody
     public RespBean loginSuccess() {
         return new RespBean("success", "登录成功!");
     }
@@ -34,11 +43,13 @@ public class LoginRegController {
      * @return
      */
     @RequestMapping("/login_page")
+    @ResponseBody
     public RespBean loginPage() {
         return new RespBean("error", "尚未登录，请登录!");
     }
 
     @RequestMapping("/reg")
+    @ResponseBody
     public RespBean reg(User user) {
         int result = userService.reg(user);
         if (result == 0) {
