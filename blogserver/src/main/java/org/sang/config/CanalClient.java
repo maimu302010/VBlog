@@ -4,6 +4,7 @@ import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.CanalEntry.*;
 import com.alibaba.otter.canal.protocol.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @create: 2022-03-11 11:18
  **/
 @Component
+@Slf4j
 public class CanalClient implements InitializingBean {
 
     private final static int BATCH_SIZE = 1000;
@@ -25,7 +27,8 @@ public class CanalClient implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // 创建链接
-        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress("127.0.0.1", 11111), "example", "", "");
+        CanalConnector connector = CanalConnectors.newSingleConnector
+                (new InetSocketAddress("localhost", 11111), "example", "", "");
         try {
             //打开连接
             connector.connect();
@@ -82,13 +85,13 @@ public class CanalClient implements InitializingBean {
             //获取操作类型：insert/update/delete类型
             EventType eventType = rowChage.getEventType();
             //打印Header信息
-            System.out.println(String.format("================》; binlog[%s:%s] , name[%s,%s] , eventType : %s",
+            log.info(String.format("================》; binlog[%s:%s] , name[%s,%s] , eventType : %s",
                     entry.getHeader().getLogfileName(), entry.getHeader().getLogfileOffset(),
                     entry.getHeader().getSchemaName(), entry.getHeader().getTableName(),
                     eventType));
             //判断是否是DDL语句
             if (rowChage.getIsDdl()) {
-                System.out.println("================》;isDdl: true,sql:" + rowChage.getSql());
+                log.info("================》;isDdl: true,sql:" + rowChage.getSql());
             }
             //获取RowChange对象里的每一行数据，打印出来
             for (RowData rowData : rowChage.getRowDatasList()) {
@@ -101,10 +104,10 @@ public class CanalClient implements InitializingBean {
                     //如果是更新的语句
                 } else {
                     //变更前的数据
-                    System.out.println("------->; before");
+                    log.info("------->; before");
                     printColumn(rowData.getBeforeColumnsList());
                     //变更后的数据
-                    System.out.println("------->; after");
+                    log.info("------->; after");
                     printColumn(rowData.getAfterColumnsList());
                 }
             }
@@ -113,7 +116,7 @@ public class CanalClient implements InitializingBean {
 
     private static void printColumn(List<Column> columns) {
         for (Column column : columns) {
-            System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
+            log.info(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
         }
     }
 }
