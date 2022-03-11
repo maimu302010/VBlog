@@ -28,7 +28,7 @@ public class CanalClient implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         // 创建链接
         CanalConnector connector = CanalConnectors.newSingleConnector
-                (new InetSocketAddress("localhost", 11111), "example", "", "");
+                (new InetSocketAddress("127.0.0.1", 11111), "example", "", "");
         try {
             //打开连接
             connector.connect();
